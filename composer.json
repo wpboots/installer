@@ -1,0 +1,26 @@
+{
+    "name": "boots/installer",
+    "type": "composer-plugin",
+    "description": "Extension installer for the boots framework.",
+    "keywords": ["boots","extension","installer","wordpress"],
+    "homepage": "http://github.com/wpboots/installer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "M. Kamal Khan",
+            "email": "shout@bhittani.com",
+            "homepage": "http://bhittani.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Boots\\Installer\\": "src/"
+        }
+    },
+    "require": {
+        "composer-plugin-api": "^1.1"
+    },
+    "extra": {
+        "class": "Boots\\Installer\\Plugin"
+    }
+}
