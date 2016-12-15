@@ -19,8 +19,15 @@ use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 
+/**
+ * @package Boots\Installer
+ * @subpackage Plugin
+ */
 class Plugin implements PluginInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function activate(Composer $composer, IOInterface $io)
     {
         $installer = new Installer($io, $composer);

@@ -19,19 +19,47 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 
+/**
+ * @package Boots\Installer
+ * @subpackage Installer
+ */
 class Installer extends LibraryInstaller
 {
+    /**
+     * Extension directory relative path.
+     * @var string
+     */
     protected $extDir = 'extend';
 
+    /**
+     * Extension type.
+     * @var string
+     */
     protected $extType = 'boots-extension';
 
+    /**
+     * Manifest relative file path.
+     * @var string
+     */
     protected $manifestFile = 'boots.json';
 
+    /**
+     * Write manifest to file.
+     * @param  string $path     Path to manifest file
+     * @param  array  $manifest Manifest
+     * @return void
+     */
     protected function writeManifest($path, array $manifest)
     {
         file_put_contents($path, json_encode($manifest));
     }
 
+    /**
+     * Mount an extension
+     * @param  PackageInterface $package Package
+     * @param  string           $path    Path to manifest file
+     * @return void
+     */
     protected function mountExtension(PackageInterface $package, $path = null)
     {
         /*if (!is_null($path) && is_file($path)) {
@@ -54,6 +82,11 @@ class Installer extends LibraryInstaller
         ]);
     }
 
+    /**
+     * Validate that the extension manifest contains a class extra.
+     * @param  PackageInterface $package Package
+     * @return string                    Path to manifest file
+     */
     protected function validateExtension(PackageInterface $package)
     {
         if (!array_key_exists('class', $package->getExtra())) {
