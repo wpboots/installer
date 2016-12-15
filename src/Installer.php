@@ -114,7 +114,7 @@ class Installer extends LibraryInstaller
     {
         if (!$this->supports($package->getType())) {
             parent::install($repo, $package);
-        } else
+        } else {
             $path = $this->validateExtension($package);
             parent::install($repo, $package);
             $this->mountExtension($package, $path);
@@ -128,7 +128,7 @@ class Installer extends LibraryInstaller
     {
         if (!$this->supports($target->getType())) {
             parent::update($repo, $initial, $target);
-        } else
+        } else {
             $path = $this->validateExtension($target);
             parent::update($repo, $initial, $target);
             $this->mountExtension($target, $path);
