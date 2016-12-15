@@ -57,7 +57,7 @@ class Installer extends LibraryInstaller
     protected function validateExtension(PackageInterface $package)
     {
         if (!array_key_exists('class', $package->getExtra())) {
-            throw new Exception(sprintf(
+            throw new \Exception(sprintf(
                 'Unable to install extension %s. Boots extensions '
                 .'require an extra property of "class" '
                 .'in its composer.json file.',
