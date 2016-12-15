@@ -50,6 +50,7 @@ class Installer extends LibraryInstaller
             'version' => $version,
             'class' => $class,
             'autoload' => $autoload,
+            'mounted' => false,
         ]);
     }
 
