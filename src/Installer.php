@@ -32,15 +32,20 @@ class Installer extends LibraryInstaller
         file_put_contents($path, json_encode($manifest));
     }
 
-    protected function mountExtension(PackageInterface $package)
+    protected function mountExtension(PackageInterface $package, $path = null)
     {
+        if (!is_null($path) && is_file($path)) {
+            return;
+        }
         $version = $package->getPrettyVersion();
         $extra = $package->getExtra();
         $class = $extra['class'];
         $autoload = $package->getAutoload();
-        $baseDir = dirname($this->composer->getConfig()->getConfigSource()->getName());
-        $installPath = $this->getInstallPath($package);
-        $path = "{$baseDir}/{$installPath}/{$this->manifestFile}";
+        if (is_null($path)) {
+            $baseDir = dirname($this->composer->getConfig()->getConfigSource()->getName());
+            $installPath = $this->getInstallPath($package);
+            $path = "{$baseDir}/{$installPath}/{$this->manifestFile}";
+        }
         $this->writeManifest($path, [
             'version' => $version,
             'class' => $class,
@@ -58,6 +63,9 @@ class Installer extends LibraryInstaller
                 $package->getPrettyName()
             ));
         }
+        $baseDir = dirname($this->composer->getConfig()->getConfigSource()->getName());
+        $installPath = $this->getInstallPath($package);
+        return "{$baseDir}/{$installPath}/{$this->manifestFile}";
     }
 
     /**
@@ -106,9 +114,9 @@ class Installer extends LibraryInstaller
         if (!$this->supports($package->getType())) {
             parent::install($repo, $package);
         } else
-            $this->validateExtension($package);
+            $path = $this->validateExtension($package);
             parent::install($repo, $package);
-            $this->mountExtension($package);
+            $this->mountExtension($package, $path);
         }
     }
 
@@ -120,9 +128,9 @@ class Installer extends LibraryInstaller
         if (!$this->supports($package->getType())) {
             parent::update($repo, $initial, $target);
         } else
-            $this->validateExtension($target);
+            $path = $this->validateExtension($target);
             parent::update($repo, $initial, $target);
-            $this->mountExtension($target);
+            $this->mountExtension($target, $path);
         }
     }
 }
