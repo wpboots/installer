@@ -126,7 +126,7 @@ class Installer extends LibraryInstaller
      */
     public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
     {
-        if (!$this->supports($package->getType())) {
+        if (!$this->supports($target->getType())) {
             parent::update($repo, $initial, $target);
         } else
             $path = $this->validateExtension($target);
