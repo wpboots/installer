@@ -34,9 +34,9 @@ class Installer extends LibraryInstaller
 
     protected function mountExtension(PackageInterface $package, $path = null)
     {
-        if (!is_null($path) && is_file($path)) {
+        /*if (!is_null($path) && is_file($path)) {
             return;
-        }
+        }*/
         $version = $package->getPrettyVersion();
         $extra = $package->getExtra();
         $class = $extra['class'];
