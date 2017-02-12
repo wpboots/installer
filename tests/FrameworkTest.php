@@ -36,7 +36,7 @@ class FrameworkTest extends TestCase
         $this->assertTrue(is_dir(__DIR__ . '/composer/boots'));
     }
 
-    public function testItCreatesConfigFile()
+    public function testItCreatesConfigFileOnInstall()
     {
         // Migrate
         $this->exec('cd tests/composer && composer install');
@@ -57,7 +57,7 @@ class FrameworkTest extends TestCase
         //
     }
 
-    public function testItSetsCorrectVersionInConfigFileAfterUpdate()
+    public function testItSetsCorrectVersionInConfigFileOnUpdate()
     {
         // Migrate
         $this->exec('cd tests/composer && composer install');
