@@ -14,7 +14,13 @@ class FrameworkTest extends TestCase
         file_put_contents($frameworkComposerFile, json_encode([
             'name' => 'boots/boots',
             'type' => 'framework',
-            'version' => '0.1'
+            'version' => '0.1',
+            'autoload' => [
+                'psr-4' => [
+                    'Acme\\' => 'acme/',
+                    'Emca\\' => 'emca/'
+                ]
+            ]
         ]));
     }
 
@@ -48,13 +54,37 @@ class FrameworkTest extends TestCase
             'version' => '0.1',
             'mounted' => false,
             'extensions' => [],
+            'autoload' => [
+                'psr-4' => [
+                    'Acme\\' => 'acme/',
+                    'Emca\\' => 'emca/'
+                ]
+            ]
         ], require $configFile);
     }
 
-    // TODO: Assert that it appends version suffix to classes on install.
-    public function testItVersionsAllClassesOnInstall()
+    // TODO: Strict assertions.
+    public function testItVersionsPsr4AutoloadsOnInstall()
     {
-        //
+        // Migrate
+        $this->testItInstallsInAppropriateDirectory();
+
+        // Assertion
+        $acmeDir = __DIR__ . '/composer/boots/acme';
+        $acmeFileSrc = $acmeDir . '/Acme.php';
+        $acmeFileVersioned = __DIR__ . '/composer/boots/Acme_0_1.php';
+        $this->assertTrue(is_dir($acmeDir));
+        $this->assertTrue(is_file($acmeFileSrc));
+        $this->assertTrue(is_file($acmeFileVersioned));
+        $this->assertEquals(file_get_contents($acmeFileVersioned), file_get_contents($acmeFileSrc));
+
+        $emcaDir = __DIR__ . '/composer/boots/emca';
+        $emcaFileSrc = $emcaDir . '/Emca.php';
+        $emcaFileVersioned = __DIR__ . '/composer/boots/Emca_0_1.php';
+        $this->assertTrue(is_dir($emcaDir));
+        $this->assertTrue(is_file($emcaFileSrc));
+        $this->assertTrue(is_file($emcaFileVersioned));
+        $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
     }
 
     public function testItSetsCorrectVersionInConfigFileOnUpdate()
@@ -101,11 +131,33 @@ class FrameworkTest extends TestCase
         $this->assertEquals('0.2', $config['version']);
         $this->assertEquals(['Foo'], $config['extensions']);
         $this->assertEquals('bar', $config['foo']);
+        $this->assertEquals(['psr-4' => [
+            'Acme\\' => 'acme/',
+            'Emca\\' => 'emca/'
+        ]], $config['autoload']);
     }
 
-    // TODO: Assert that it appends version suffix to classes on update.
-    public function testItVersionsAllClassesOnUpdate()
+    // TODO: Strict assertions.
+    public function testItVersionsPsr4AutoloadsOnUpdate()
     {
-        //
+        // Migrate
+        $this->testItSetsCorrectVersionInConfigFileOnUpdate();
+
+        // Assertion
+        $acmeDir = __DIR__ . '/composer/boots/acme';
+        $acmeFileSrc = $acmeDir . '/Acme.php';
+        $acmeFileVersioned = __DIR__ . '/composer/boots/Acme_0_2.php';
+        $this->assertTrue(is_dir($acmeDir));
+        $this->assertTrue(is_file($acmeFileSrc));
+        $this->assertTrue(is_file($acmeFileVersioned));
+        $this->assertEquals(file_get_contents($acmeFileVersioned), file_get_contents($acmeFileSrc));
+
+        $emcaDir = __DIR__ . '/composer/boots/emca';
+        $emcaFileSrc = $emcaDir . '/Emca.php';
+        $emcaFileVersioned = __DIR__ . '/composer/boots/Emca_0_2.php';
+        $this->assertTrue(is_dir($emcaDir));
+        $this->assertTrue(is_file($emcaFileSrc));
+        $this->assertTrue(is_file($emcaFileVersioned));
+        $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
     }
 }

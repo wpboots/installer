@@ -15,8 +15,14 @@ namespace Boots\Installer;
  * @license    https://github.com/wpboots/installer/blob/master/LICENSE
  */
 
+use PhpParser\Error;
+use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
 use Composer\Package\PackageInterface;
+use PhpParser\NodeVisitor\NameResolver;
 use Composer\Installer\LibraryInstaller;
+use Bhittani\PhpParser\AppendSuffixVisitor;
+use PhpParser\PrettyPrinter\Standard as PhpPrinter;
 use Composer\Repository\InstalledRepositoryInterface;
 
 /**
@@ -45,10 +51,17 @@ class FrameworkInstaller extends LibraryInstaller
 
     protected static function readConfig($path)
     {
-        $config = ['version' => '', 'mounted' => false, 'extensions' => []];
+        $config = [
+            'version' => '',
+            'mounted' => false,
+            'extensions' => [],
+            'autoload' => [],
+        ];
+
         if (is_file($path)) {
             $config = require $path;
         }
+
         return $config;
     }
 
@@ -63,9 +76,56 @@ class FrameworkInstaller extends LibraryInstaller
 
     protected function getAbsolutePath(PackageInterface $package)
     {
+        // return $this->composer->getInstallationManager()->getInstallPath($package);
         $baseDir = dirname($this->composer->getConfig()->getConfigSource()->getName());
         $installPath = $this->getInstallPath($package);
         return "{$baseDir}/{$installPath}";
+    }
+
+    protected function mount(PackageInterface $package)
+    {
+        $path = $this->getAbsolutePath($package);
+        $version = $package->getPrettyVersion();
+        $autoloads = $package->getAutoload();
+
+        $suffix = str_replace('.', '_', $version);
+        $suffix = str_replace('-', '_', $suffix);
+        $suffix = empty($suffix) ? '' : "_{$suffix}";
+
+        $regexes = [];
+        foreach (array_keys($autoloads['psr-4']) as $prefix) {
+            $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
+        }
+        $traverser = new NodeTraverser;
+        $traverser->addVisitor(new AppendSuffixVisitor($suffix, $regexes));
+
+        $printer = new PhpPrinter;
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+
+        foreach (array_values($autoloads['psr-4']) as $rpath) {
+            $dir = $path . '/' . trim($rpath, '/');
+            if (!is_dir($dir)) {
+                continue;
+            }
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
+            $files = new \RegexIterator($files, '/\.php$/');
+            foreach ($files as $file) {
+                try {
+                    // read the file that should be converted
+                    $code = file_get_contents($file);
+                    // parse
+                    $stmts = $parser->parse($code);
+                    // traverse
+                    $stmts = $traverser->traverse($stmts);
+                    // pretty print
+                    $code = $printer->prettyPrintFile($stmts);
+                    // write the converted file to the target directory
+                    file_put_contents($file, $code . PHP_EOL);
+                } catch (Error $e) {
+                    echo 'Parse Error: ', $e->getMessage();
+                }
+            }
+        }
     }
 
     /**
@@ -105,10 +165,13 @@ class FrameworkInstaller extends LibraryInstaller
 
         parent::install($repo, $package);
 
+        $this->mount($package);
+
         if (!isset($config)) {
             $config = $this->readConfig($configPath);
         }
         $config['version'] = $package->getPrettyVersion();
+        $config['autoload'] = $package->getAutoload();
         $this->writeConfig($configPath, $config);
     }
 }
