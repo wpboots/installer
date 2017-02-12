@@ -2,6 +2,6 @@
 
 namespace Emca;
 
-class Emca_0_1
+class Emca_0_2
 {
 }

@@ -12,10 +12,10 @@ $frameworkComposerFile = __DIR__ . '/framework/composer.json';
 file_put_contents($frameworkComposerFile, json_encode([
     'name' => 'boots/boots',
     'type' => 'framework',
-    'version' => '0.1',
+    'version' => '0.2',
     'autoload' => [
         'psr-4' => [
-            'Acme\\' => 'acme/',
+            'Acme\\Acme\\' => 'acme/',
             'Emca\\' => 'emca/',
         ],
     ],

@@ -103,22 +103,28 @@ class ExtensionInstaller extends LibraryInstaller
         return $this->getRootPath() . '/' . $this->getInstallPath($package);
     }
 
-    protected function mount(PackageInterface $package)
+    protected function sanitizeVersion($version)
+    {
+        $suffix = str_replace('.', '_', $version);
+        $suffix = str_replace('-', '_', $suffix);
+        return empty($suffix) ? '' : "_{$suffix}";
+    }
+
+    protected function mount(PackageInterface $package, $regexes = [])
     {
         $path = $this->getAbsolutePath($package);
         $version = $package->getPrettyVersion();
         $autoloads = $package->getAutoload();
 
-        $suffix = str_replace('.', '_', $version);
-        $suffix = str_replace('-', '_', $suffix);
-        $suffix = empty($suffix) ? '' : "_{$suffix}";
+        $suffix = $this->sanitizeVersion($version);
 
-        $regexes = [];
-        foreach (array_keys($autoloads['psr-4']) as $prefix) {
-            $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
-        }
         $traverser = new NodeTraverser;
-        $traverser->addVisitor(new AppendSuffixVisitor($suffix, $regexes));
+        if (isset($autoloads['psr-4'])) {
+            foreach (array_keys($autoloads['psr-4']) as $prefix) {
+                $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
+            }
+        }
+        $traverser->addVisitor(new AppendSuffixVisitor(null, $regexes));
 
         $printer = new PhpPrinter;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
@@ -217,11 +223,17 @@ class ExtensionInstaller extends LibraryInstaller
 
         parent::install($repo, $package);
 
-        $this->mount($package);
-
         if (!isset($config)) {
             $config = $this->readConfig($configPath);
         }
+
+        $regexes = [];
+        $suffix = $this->sanitizeVersion($config['version']);
+        foreach (array_keys($config['autoload']['psr-4']) as $prefix) {
+            $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
+        }
+        $this->mount($package, $regexes);
+
         $config['extensions'][$this->extSlug] = [
             'version' => $package->getPrettyVersion(),
             'autoload' => $package->getAutoload(),

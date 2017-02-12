@@ -2,6 +2,6 @@
 
 namespace Acme\Acme;
 
-class Acme
+class Acme_0_2
 {
 }
