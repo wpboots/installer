@@ -95,7 +95,7 @@ class ExtensionInstaller extends LibraryInstaller
     protected function getRootPath($path = '')
     {
         $root = dirname($this->composer->getConfig()->getConfigSource()->getName());
-        return $root . '/' . trim($path, '/');
+        return rtrim($root . '/' . trim($path, '/'), '/');
     }
 
     protected function getAbsolutePath(PackageInterface $package)
@@ -217,7 +217,7 @@ class ExtensionInstaller extends LibraryInstaller
 
         parent::install($repo, $package);
 
-        // $this->mount($package);
+        $this->mount($package);
 
         if (!isset($config)) {
             $config = $this->readConfig($configPath);

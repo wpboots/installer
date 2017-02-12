@@ -31,27 +31,27 @@ class ExtensionTest extends TestCase
             ],
         ], $config['extensions']['foo-bar']);
     }
-    /*
+
     // TODO: Strict assertions.
     public function testItVersionsPsr4AutoloadsOnInstall()
     {
         // Assertion
-        $acmeDir = __DIR__ . '/composer/boots/acme';
+        $acmeDir = __DIR__ . '/composer/boots/extend/foo-bar/acme';
         $acmeFileSrc = $acmeDir . '/Acme.php';
-        $acmeFileVersioned = __DIR__ . '/composer/boots/Acme_0_1.php';
+        $acmeFileVersioned = __DIR__ . '/extension/Acme_0_1.php';
         $this->assertTrue(is_dir($acmeDir));
         $this->assertTrue(is_file($acmeFileSrc));
         $this->assertTrue(is_file($acmeFileVersioned));
         $this->assertEquals(file_get_contents($acmeFileVersioned), file_get_contents($acmeFileSrc));
 
-        $emcaDir = __DIR__ . '/composer/boots/emca';
+        $emcaDir = __DIR__ . '/composer/boots/extend/foo-bar/emca';
         $emcaFileSrc = $emcaDir . '/Emca.php';
-        $emcaFileVersioned = __DIR__ . '/composer/boots/Emca_0_1.php';
+        $emcaFileVersioned = __DIR__ . '/extension/Emca_0_1.php';
         $this->assertTrue(is_dir($emcaDir));
         $this->assertTrue(is_file($emcaFileSrc));
         $this->assertTrue(is_file($emcaFileVersioned));
         $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
-    }*/
+    }
 
     public function testItSetsCorrectVersionInConfigFileOnUpdate()
     {
@@ -96,25 +96,25 @@ class ExtensionTest extends TestCase
             'Emca\\Extension\\' => 'emca/'
         ]], $config['extensions']['foo-bar']['autoload']);
     }
-    /*
+
     // TODO: Strict assertions.
     public function testItVersionsPsr4AutoloadsOnUpdate()
     {
         // Assertion
-        $acmeDir = __DIR__ . '/composer/boots/acme';
+        $acmeDir = __DIR__ . '/composer/boots/extend/foo-bar/acme';
         $acmeFileSrc = $acmeDir . '/Acme.php';
-        $acmeFileVersioned = __DIR__ . '/composer/boots/Acme_0_3.php';
+        $acmeFileVersioned = __DIR__ . '/extension/Acme_0_3.php';
         $this->assertTrue(is_dir($acmeDir));
         $this->assertTrue(is_file($acmeFileSrc));
         $this->assertTrue(is_file($acmeFileVersioned));
         $this->assertEquals(file_get_contents($acmeFileVersioned), file_get_contents($acmeFileSrc));
 
-        $emcaDir = __DIR__ . '/composer/boots/emca';
+        $emcaDir = __DIR__ . '/composer/boots/extend/foo-bar/emca';
         $emcaFileSrc = $emcaDir . '/Emca.php';
-        $emcaFileVersioned = __DIR__ . '/composer/boots/Emca_0_3.php';
+        $emcaFileVersioned = __DIR__ . '/extension/Emca_0_3.php';
         $this->assertTrue(is_dir($emcaDir));
         $this->assertTrue(is_file($emcaFileSrc));
         $this->assertTrue(is_file($emcaFileVersioned));
         $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
-    }*/
+    }
 }
