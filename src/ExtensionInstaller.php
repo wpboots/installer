@@ -23,7 +23,7 @@ use Composer\Repository\InstalledRepositoryInterface;
  * @package Boots\Installer
  * @subpackage Installer
  */
-class Installer extends LibraryInstaller
+class ExtensionInstaller extends LibraryInstaller
 {
     /**
      * Extension directory relative path.

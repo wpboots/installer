@@ -11,7 +11,7 @@ namespace Boots\Installer;
  * @version    1.x
  * @see        http://wpboots.com
  * @link       https://github.com/wpboots/installer
- * @copyright  2014-2016 Kamal Khan
+ * @copyright  2014-2017 Kamal Khan
  * @license    https://github.com/wpboots/installer/blob/master/LICENSE
  */
 
@@ -30,7 +30,11 @@ class Plugin implements PluginInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
-        $installer = new Installer($io, $composer);
-        $composer->getInstallationManager()->addInstaller($installer);
+        $frameworkInstaller = new FrameworkInstaller($io, $composer);
+        $extensionInstaller = new ExtensionInstaller($io, $composer);
+
+        $manager = $composer->getInstallationManager();
+        $manager->addInstaller($frameworkInstaller);
+        $manager->addInstaller($extensionInstaller);
     }
 }
