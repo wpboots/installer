@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kamalkhan/php-parser.git",
-                "reference": "3b0be239054af8a6a73989c20a6de04704c98a1b"
+                "reference": "74cebef37438697902fb6fba5ed5ee3e02a05314"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kamalkhan/php-parser/zipball/3b0be239054af8a6a73989c20a6de04704c98a1b",
-                "reference": "3b0be239054af8a6a73989c20a6de04704c98a1b",
+                "url": "https://api.github.com/repos/kamalkhan/php-parser/zipball/74cebef37438697902fb6fba5ed5ee3e02a05314",
+                "reference": "74cebef37438697902fb6fba5ed5ee3e02a05314",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "parser",
                 "syntax"
             ],
-            "time": "2017-02-12 10:45:19"
+            "time": "2017-02-12 22:02:33"
         },
         {
             "name": "nikic/php-parser",
