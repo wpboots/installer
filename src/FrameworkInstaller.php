@@ -6,7 +6,7 @@ namespace Boots\Installer;
  * This file is part of the Boots\Installer package.
  *
  * @package    Boots\Installer
- * @subpackage Installer
+ * @subpackage FrameworkInstaller
  * @author     Kamal Khan <shout@bhittani.com>
  * @version    1.x
  * @see        http://wpboots.com
@@ -21,7 +21,7 @@ use Composer\Repository\InstalledRepositoryInterface;
 
 /**
  * @package Boots\Installer
- * @subpackage Installer
+ * @subpackage FrameworkInstaller
  */
 class FrameworkInstaller extends LibraryInstaller
 {
