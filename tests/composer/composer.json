@@ -1,0 +1,32 @@
+{
+    "name": "boots/installer-test",
+    "description": "Test for boots/installer",
+    "require-dev": {
+        "boots/boots": "~0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Boots\\Installer\\": "./"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../framework",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "packagist": false
+        }
+    ],
+    "scripts": {
+        "pre-package-install": [
+            "Boots\\Installer\\PluginLoader::load"
+        ],
+        "pre-package-update": [
+            "Boots\\Installer\\PluginLoader::load"
+        ]
+    }
+}
