@@ -97,34 +97,18 @@ class FrameworkInstaller extends LibraryInstaller
             return parent::install($repo, $package);
         }
 
-        parent::install($repo, $package);
-
         $path = $this->getAbsolutePath($package);
         $configPath = "{$path}/{$this->configFile}";
-        $config = $this->readConfig($configPath);
-        $config['version'] = $package->getPrettyVersion();
-        $this->writeConfig($configPath, $config);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
-    {
-        if ($package->getPrettyName() !== $this->framework) {
-            return parent::update($repo, $initial, $target);
+        if (is_file($configPath)) {
+            $config = $this->readConfig($configPath);
         }
 
-        $path = $this->getAbsolutePath($initial);
-        $configPath = "{$path}/{$this->configFile}";
-        $config = $this->readConfig($configPath);
+        parent::install($repo, $package);
 
-        parent::update($repo, $initial, $target);
-
-        $config['version'] = $target->getPrettyVersion();
-
-        $path = $this->getAbsolutePath($target);
-        $configPath = "{$path}/{$this->configFile}";
+        if (!isset($config)) {
+            $config = $this->readConfig($configPath);
+        }
+        $config['version'] = $package->getPrettyVersion();
         $this->writeConfig($configPath, $config);
     }
 }
