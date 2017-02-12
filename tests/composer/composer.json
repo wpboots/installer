@@ -2,7 +2,8 @@
     "name": "boots/installer-test",
     "description": "Test for boots/installer",
     "require-dev": {
-        "boots/boots": "~0.1"
+        "boots/boots": "~0.1",
+        "boots/extension-foo-bar": "~0.1"
     },
     "autoload": {
         "psr-4": {
@@ -13,6 +14,13 @@
         {
             "type": "path",
             "url": "../framework",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "type": "path",
+            "url": "../extension",
             "options": {
                 "symlink": false
             }

@@ -1,6 +1,6 @@
 <?php
 
-class FrameworkTest extends TestCase
+class ExtensionTest extends TestCase
 {
     public function testItInstallsInAppropriateDirectory()
     {
@@ -8,7 +8,7 @@ class FrameworkTest extends TestCase
         $this->exec('cd tests/composer && composer install');
 
         // Assertion
-        $this->assertTrue(is_dir(__DIR__ . '/composer/boots'));
+        $this->assertTrue(is_dir(__DIR__ . '/composer/boots/extend/foo-bar'));
     }
 
     public function testItCreatesConfigFileOnInstall()
@@ -17,17 +17,21 @@ class FrameworkTest extends TestCase
         $configFile = __DIR__ . '/composer/boots/boots.php';
         $this->assertTrue(is_file($configFile));
         $config = require $configFile;
-        $this->assertTrue(is_array($config));
-        $this->assertEquals('0.1', $config['version']);
-        $this->assertEquals(false, $config['mounted']);
+        $this->assertTrue(is_array($config['extensions']));
+        $this->assertTrue(is_array($config['extensions']['foo-bar']));
         $this->assertEquals([
-            'psr-4' => [
-                'Acme\\' => 'acme/',
-                'Emca\\' => 'emca/',
+            'version' => '0.1',
+            'mounted' => false,
+            'class' => 'Emca\\Extension\\Emca',
+            'autoload' => [
+                'psr-4' => [
+                    'Acme\\Extension\\' => 'acme/',
+                    'Emca\\Extension\\' => 'emca/',
+                ],
             ],
-        ], $config['autoload']);
+        ], $config['extensions']['foo-bar']);
     }
-
+    /*
     // TODO: Strict assertions.
     public function testItVersionsPsr4AutoloadsOnInstall()
     {
@@ -47,11 +51,11 @@ class FrameworkTest extends TestCase
         $this->assertTrue(is_file($emcaFileSrc));
         $this->assertTrue(is_file($emcaFileVersioned));
         $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
-    }
+    }*/
 
     public function testItSetsCorrectVersionInConfigFileOnUpdate()
     {
-        $composerFile = __DIR__ . '/framework/composer.json';
+        $composerFile = __DIR__ . '/extension/composer.json';
         $composer = json_decode(file_get_contents($composerFile), true);
         $this->assertEquals('0.1', $composer['version']);
         file_put_contents($composerFile, json_encode(array_replace(
@@ -62,19 +66,19 @@ class FrameworkTest extends TestCase
 
         // Assertion
         $config = require __DIR__ . '/composer/boots/boots.php';
-        $this->assertEquals('0.2', $config['version']);
+        $this->assertEquals('0.2', $config['extensions']['foo-bar']['version']);
     }
 
     public function testItRetainsPreviousConfigOnUpdate()
     {
         $configFile = __DIR__ . '/composer/boots/boots.php';
         $config = require $configFile;
-        $config['foo'] = 'bar';
+        $config['beep'] = 'boop';
         $contents = '<?php return ' . var_export($config, true) . ';' . PHP_EOL;
         file_put_contents($configFile, $contents);
 
         // Update
-        $composerFile = __DIR__ . '/framework/composer.json';
+        $composerFile = __DIR__ . '/extension/composer.json';
         $composer = json_decode(file_get_contents($composerFile), true);
         $this->assertEquals('0.2', $composer['version']);
         file_put_contents($composerFile, json_encode(array_replace(
@@ -85,14 +89,14 @@ class FrameworkTest extends TestCase
 
         // Assertion
         $config = require $configFile;
-        $this->assertEquals('0.3', $config['version']);
-        $this->assertEquals('bar', $config['foo']);
+        $this->assertEquals('0.3', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals('boop', $config['beep']);
         $this->assertEquals(['psr-4' => [
-            'Acme\\' => 'acme/',
-            'Emca\\' => 'emca/'
-        ]], $config['autoload']);
+            'Acme\\Extension\\' => 'acme/',
+            'Emca\\Extension\\' => 'emca/'
+        ]], $config['extensions']['foo-bar']['autoload']);
     }
-
+    /*
     // TODO: Strict assertions.
     public function testItVersionsPsr4AutoloadsOnUpdate()
     {
@@ -112,5 +116,5 @@ class FrameworkTest extends TestCase
         $this->assertTrue(is_file($emcaFileSrc));
         $this->assertTrue(is_file($emcaFileVersioned));
         $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
-    }
+    }*/
 }
