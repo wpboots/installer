@@ -75,7 +75,7 @@ class FrameworkTest extends TestCase
         $this->assertEquals('0.2', $config['version']);
     }
 
-    public function testItRetainsPreviousConfigOnUpdateExceptVersion()
+    public function testItRetainsPreviousConfigExceptVersionOnUpdate()
     {
         // Migrate
         $this->exec('cd tests/composer && composer install');
