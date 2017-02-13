@@ -92,6 +92,7 @@ class ExtensionInstaller extends Installer
         }
 
         $extra = $package->getExtra();
+        $mount = isset($extra['mount']) ? $extra['mount'] : true;
 
         if (!array_key_exists('class', $extra)) {
             throw new \Exception(sprintf(
@@ -115,20 +116,22 @@ class ExtensionInstaller extends Installer
         }
 
         $regexes = [];
-        $suffix = $this->sanitizeVersion($config['version']);
-        foreach (array_keys($config['autoload']['psr-4']) as $prefix) {
-            $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
+        if (isset($config['autoload']['psr-4'])
+            && ($mount === true || $mount === 'global')
+        ) {
+            $suffix = $this->sanitizeVersion($config['version']);
+            foreach (array_keys($config['autoload']['psr-4']) as $prefix) {
+                $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
+            }
         }
-        $this->mount($package, $regexes);
+        $this->mount($package, $regexes, $mount === false || $mount === 'global');
 
         $config['extensions'][$this->extSlug] = [
             'version' => $package->getPrettyVersion(),
             'autoload' => $package->getAutoload(),
             'class' => $extra['class'],
+            'mounted' => $mount,
         ];
-        if (!isset($config['extensions'][$this->extSlug]['mounted'])) {
-            $config['extensions'][$this->extSlug]['mounted'] = false;
-        }
 
         $this->writeConfig($configPath, $config);
     }

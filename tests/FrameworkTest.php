@@ -19,7 +19,7 @@ class FrameworkTest extends TestCase
         $config = require $configFile;
         $this->assertTrue(is_array($config));
         $this->assertEquals('0.2', $config['version']);
-        $this->assertEquals(false, $config['mounted']);
+        $this->assertTrue($config['mounted']);
         $this->assertEquals([
             'psr-4' => [
                 'Acme\\Acme\\' => 'acme/',

@@ -59,6 +59,9 @@ class FrameworkInstaller extends Installer
             return parent::install($repo, $package);
         }
 
+        $extra = $package->getExtra();
+        $mount = isset($extra['mount']) ? $extra['mount'] : true;
+
         $path = $this->getAbsolutePath($package);
         $configPath = "{$path}/{$this->configFile}";
         if (is_file($configPath)) {
@@ -67,11 +70,12 @@ class FrameworkInstaller extends Installer
 
         parent::install($repo, $package);
 
-        $this->mount($package);
+        $this->mount($package, [], $mount === false);
 
         if (!isset($config)) {
             $config = $this->readConfig($configPath);
         }
+        $config['mounted'] = $mount;
         $config['version'] = $package->getPrettyVersion();
         $config['autoload'] = $package->getAutoload();
         $this->writeConfig($configPath, $config);

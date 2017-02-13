@@ -21,7 +21,7 @@ class ExtensionTest extends TestCase
         $this->assertTrue(is_array($config['extensions']['foo-bar']));
         $this->assertEquals([
             'version' => '0.1',
-            'mounted' => false,
+            'mounted' => true,
             'class' => 'Emca\\Extension\\Emca',
             'autoload' => [
                 'psr-4' => [
@@ -89,6 +89,7 @@ class ExtensionTest extends TestCase
 
         // Assertion
         $config = require $configFile;
+        $this->assertTrue($config['extensions']['foo-bar']['mounted']);
         $this->assertEquals('0.3', $config['extensions']['foo-bar']['version']);
         $this->assertEquals('boop', $config['beep']);
         $this->assertEquals(['psr-4' => [
@@ -116,5 +117,57 @@ class ExtensionTest extends TestCase
         $this->assertTrue(is_file($emcaFileSrc));
         $this->assertTrue(is_file($emcaFileVersioned));
         $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
+    }
+
+    public function testItShouldAllowInstallationWithMountingModes()
+    {
+        $composerFile = __DIR__ . '/extension/composer.json';
+        $composer = json_decode(file_get_contents($composerFile), true);
+        $this->assertFalse(array_key_exists('mount', $composer['extra']));
+
+        // false => no mounting.
+        file_put_contents($composerFile, json_encode(array_replace_recursive(
+            $composer,
+            ['version' => '0.4', 'extra' => ['mount' => false]]
+        )));
+        $this->exec('cd tests/composer && composer update');
+        // Assertion
+        $config = require __DIR__ . '/composer/boots/boots.php';
+        $this->assertEquals('0.4', $config['extensions']['foo-bar']['version']);
+        $this->assertFalse($config['extensions']['foo-bar']['mounted']);
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/extension/Acme.php'),
+            file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
+        );
+
+        // global => only global mounting.
+        file_put_contents($composerFile, json_encode(array_replace_recursive(
+            $composer,
+            ['version' => '0.5', 'extra' => ['mount' => 'global']]
+        )));
+        $this->exec('cd tests/composer && composer update');
+        // Assertion
+        $config = require __DIR__ . '/composer/boots/boots.php';
+        $this->assertEquals('0.5', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals('global', $config['extensions']['foo-bar']['mounted']);
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/extension/Acme_global.php'),
+            file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
+        );
+
+        // local => only local mounting.
+        file_put_contents($composerFile, json_encode(array_replace_recursive(
+            $composer,
+            ['version' => '0.6', 'extra' => ['mount' => 'local']]
+        )));
+        $this->exec('cd tests/composer && composer update');
+        // Assertion
+        $config = require __DIR__ . '/composer/boots/boots.php';
+        $this->assertEquals('0.6', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals('local', $config['extensions']['foo-bar']['mounted']);
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/extension/Acme_local.php'),
+            file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
+        );
     }
 }

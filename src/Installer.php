@@ -91,7 +91,7 @@ abstract class Installer extends LibraryInstaller
         return empty($suffix) ? '' : "_{$suffix}";
     }
 
-    protected function mount(PackageInterface $package, $regexes = [])
+    protected function mount(PackageInterface $package, $regexes = [], $skipLocalMount = false)
     {
         $path = $this->getAbsolutePath($package);
         $version = $package->getPrettyVersion();
@@ -100,12 +100,14 @@ abstract class Installer extends LibraryInstaller
         $suffix = $this->sanitizeVersion($version);
 
         $traverser = new NodeTraverser;
-        if (isset($autoloads['psr-4'])) {
+        if (!$skipLocalMount && isset($autoloads['psr-4'])) {
             foreach (array_keys($autoloads['psr-4']) as $prefix) {
                 $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
             }
         }
-        $traverser->addVisitor(new AppendSuffixVisitor(null, $regexes));
+        if (count($regexes)) {
+            $traverser->addVisitor(new AppendSuffixVisitor(null, $regexes));
+        }
 
         $printer = new PhpPrinter;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
