@@ -12,5 +12,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             }
             throw new RuntimeException($error, $status);
         }
+        foreach ($output as $o) {
+            echo $o . PHP_EOL;
+        }
     }
 }

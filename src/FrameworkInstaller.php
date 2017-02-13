@@ -30,6 +30,21 @@ class FrameworkInstaller extends Installer
      */
     protected $framework = 'boots/boots';
 
+    // public function cascade(InstalledRepositoryInterface $repo)
+    // {
+    //     $installationManager = $this->composer->getInstallationManager();
+    //     $localRepos = $this->composer->getRepositoryManager()->getRepositories();
+
+    //     $extensionInstaller = new ExtensionInstaller($this->io, $this->composer);
+    //     foreach ($localRepos as $repository) {
+    //         foreach ($repository->getPackages() as $package) {
+    //             if ($extensionInstaller->supports($package->getType())) {
+    //                 $extensionInstaller->install($repo, $package, true);
+    //             }
+    //         }
+    //     }
+    // }
+
     /**
      * {@inheritDoc}
      */
@@ -79,5 +94,8 @@ class FrameworkInstaller extends Installer
         $config['version'] = $package->getPrettyVersion();
         $config['autoload'] = $package->getAutoload();
         $this->writeConfig($configPath, $config);
+
+        // Update all extensions
+        // $this->cascade($repo);
     }
 }

@@ -113,4 +113,37 @@ class FrameworkTest extends TestCase
         $this->assertTrue(is_file($emcaFileVersioned));
         $this->assertEquals(file_get_contents($emcaFileVersioned), file_get_contents($emcaFileSrc));
     }
+
+    public function testItMountsAllExtensionsOnUpdate()
+    {
+        $configFile = __DIR__ . '/composer/boots/boots.php';
+        // Update
+        $composerFile = __DIR__ . '/framework/composer.json';
+        $composer = json_decode(file_get_contents($composerFile), true);
+        $this->assertEquals('0.4', $composer['version']);
+        // Assert extension
+        $config = require $configFile;
+        $this->assertEquals('0.1', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/extension/Acme_framework1.php'),
+            file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
+        );
+        file_put_contents($composerFile, json_encode(array_replace(
+            $composer,
+            ['version' => '0.5']
+        )));
+        $this->exec('cd tests/composer && composer update');
+
+        $config = require $configFile;
+
+        // Assert framework
+        $this->assertEquals('0.5', $config['version']);
+
+        // Assert extension
+        $this->assertEquals('0.1', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/extension/Acme_framework2.php'),
+            file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
+        );
+    }
 }

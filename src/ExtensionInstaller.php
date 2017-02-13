@@ -126,6 +126,11 @@ class ExtensionInstaller extends Installer
         }
         $this->mount($package, $regexes, $mount === false || $mount === 'global');
 
+        if (!$this->extSlug) {
+            $unwantedLength = strlen($this->extPrefix) + 1;
+            $this->extSlug = substr($package->getPrettyName(), $unwantedLength);
+        }
+
         $config['extensions'][$this->extSlug] = [
             'version' => $package->getPrettyVersion(),
             'autoload' => $package->getAutoload(),
