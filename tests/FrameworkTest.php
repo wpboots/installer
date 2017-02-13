@@ -123,7 +123,7 @@ class FrameworkTest extends TestCase
         $this->assertEquals('0.4', $composer['version']);
         // Assert extension
         $config = require $configFile;
-        $this->assertEquals('0.1', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals('0.6', $config['extensions']['foo-bar']['version']);
         $this->assertEquals(
             file_get_contents(__DIR__ . '/extension/Acme_framework1.php'),
             file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
@@ -140,7 +140,7 @@ class FrameworkTest extends TestCase
         $this->assertEquals('0.5', $config['version']);
 
         // Assert extension
-        $this->assertEquals('0.1', $config['extensions']['foo-bar']['version']);
+        $this->assertEquals('0.6', $config['extensions']['foo-bar']['version']);
         $this->assertEquals(
             file_get_contents(__DIR__ . '/extension/Acme_framework2.php'),
             file_get_contents(__DIR__ . '/composer/boots/extend/foo-bar/acme/Acme.php')
