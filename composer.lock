@@ -4,11 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d12a2575d10df97d63a24e42a70fa50f",
+    "content-hash": "ff17075683762cdb428edf56e25a7a38",
     "packages": [
         {
             "name": "bhittani/php-parser",
-            "version": "dev-master",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kamalkhan/php-parser.git",
@@ -52,7 +52,7 @@
                 "parser",
                 "syntax"
             ],
-            "time": "2017-02-12 22:02:33"
+            "time": "2017-02-12T22:02:33+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1221,9 +1221,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "bhittani/php-parser": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
