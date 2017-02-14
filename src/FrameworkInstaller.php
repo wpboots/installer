@@ -85,7 +85,9 @@ class FrameworkInstaller extends Installer
 
         parent::install($repo, $package);
 
-        $this->mount($package, [], $mount === false);
+        if ($mount !== false) {
+            $this->mount($package);
+        }
 
         if (!isset($config)) {
             $config = $this->readConfig($configPath);

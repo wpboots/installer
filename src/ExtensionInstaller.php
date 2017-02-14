@@ -124,7 +124,10 @@ class ExtensionInstaller extends Installer
                 $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
             }
         }
-        $this->mount($package, $regexes, $mount === false || $mount === 'global');
+
+        if ($mount !== false) {
+            $this->mount($package, $regexes, $mount === 'global');
+        }
 
         if (!$this->extSlug) {
             $unwantedLength = strlen($this->extPrefix) + 1;
