@@ -2,18 +2,6 @@
 
 abstract class TestCase extends PHPUnit_Framework_TestCase
 {
-    protected $configFile = __DIR__ . '/composer/boots/boots.php';
-
-    protected $frameworkDir = __DIR__ . '/composer/boots';
-
-    protected $srcFrameworkDir = __DIR__ . '/framework';
-
-    protected $extendDir = __DIR__ . '/composer/boots/extend';
-
-    protected $extensionDir = __DIR__ . '/composer/boots/extend/foo-bar';
-
-    protected $srcExtensionDir = __DIR__ . '/extension';
-
     protected function configFile()
     {
         return __DIR__ . '/composer/boots/boots.php';
