@@ -14,13 +14,43 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected $srcExtensionDir = __DIR__ . '/extension';
 
+    protected function configFile()
+    {
+        return __DIR__ . '/composer/boots/boots.php';
+    }
+
+    protected function frameworkDir()
+    {
+        return __DIR__ . '/composer/boots';
+    }
+
+    protected function srcFrameworkDir()
+    {
+        return __DIR__ . '/framework';
+    }
+
+    protected function extendDir()
+    {
+        return __DIR__ . '/composer/boots/extend';
+    }
+
+    protected function extensionDir()
+    {
+        return __DIR__ . '/composer/boots/extend/foo-bar';
+    }
+
+    protected function srcExtensionDir()
+    {
+        return __DIR__ . '/extension';
+    }
+
     protected function config(array $replace = [])
     {
-        $config = require $this->configFile;
+        $config = require $this->configFile();
         if (count($replace)) {
             $config = array_replace_recursive($config, $replace);
             $contents = '<?php return ' . var_export($config, true) . ';' . PHP_EOL;
-            file_put_contents($this->configFile, $contents);
+            file_put_contents($this->configFile(), $contents);
         }
         return $config;
     }
@@ -37,12 +67,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected function frameworkComposer(array $replace = [])
     {
-        return $this->composer($this->srcFrameworkDir . '/composer.json', $replace);
+        return $this->composer($this->srcFrameworkDir() . '/composer.json', $replace);
     }
 
     protected function extensionComposer(array $replace = [])
     {
-        return $this->composer($this->srcExtensionDir . '/composer.json', $replace);
+        return $this->composer($this->srcExtensionDir() . '/composer.json', $replace);
     }
 
     protected function composerInstall()

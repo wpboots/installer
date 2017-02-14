@@ -4,12 +4,12 @@ class FrameworkTest extends TestCase
 {
     public function testItInstallsInAppropriateDirectory()
     {
-        $this->assertTrue(is_dir($this->frameworkDir));
+        $this->assertTrue(is_dir($this->frameworkDir()));
     }
 
     public function testItCreatesConfigFileOnInstall()
     {
-        $this->assertTrue(is_file($this->configFile));
+        $this->assertTrue(is_file($this->configFile()));
 
         $config = $this->config();
 
@@ -26,12 +26,12 @@ class FrameworkTest extends TestCase
     public function testItVersionsPsr4AutoloadsOnInstall()
     {
         $this->assertEquals(
-            file_get_contents($this->frameworkDir . '/Acme_2_0.php'),
-            file_get_contents($this->frameworkDir . '/acme/Acme.php')
+            file_get_contents($this->frameworkDir() . '/Acme_2_0.php'),
+            file_get_contents($this->frameworkDir() . '/acme/Acme.php')
         );
         $this->assertEquals(
-            file_get_contents($this->frameworkDir . '/Emca_2_0.php'),
-            file_get_contents($this->frameworkDir . '/emca/Emca.php')
+            file_get_contents($this->frameworkDir() . '/Emca_2_0.php'),
+            file_get_contents($this->frameworkDir() . '/emca/Emca.php')
         );
     }
 
@@ -57,12 +57,12 @@ class FrameworkTest extends TestCase
         $this->composerUpdate();
 
         $this->assertEquals(
-            file_get_contents($this->frameworkDir . '/Acme_2_1.php'),
-            file_get_contents($this->frameworkDir . '/acme/Acme.php')
+            file_get_contents($this->frameworkDir() . '/Acme_2_1.php'),
+            file_get_contents($this->frameworkDir() . '/acme/Acme.php')
         );
         $this->assertEquals(
-            file_get_contents($this->frameworkDir . '/Emca_2_1.php'),
-            file_get_contents($this->frameworkDir . '/emca/Emca.php')
+            file_get_contents($this->frameworkDir() . '/Emca_2_1.php'),
+            file_get_contents($this->frameworkDir() . '/emca/Emca.php')
         );
     }
 
@@ -76,8 +76,8 @@ class FrameworkTest extends TestCase
         $config = $this->config();
         $this->assertEquals('2.1', $config['version']);
         $this->assertEquals(
-            file_get_contents($this->srcExtensionDir . '/Acme_framework.php'),
-            file_get_contents($this->extensionDir . '/acme/Acme.php')
+            file_get_contents($this->srcExtensionDir() . '/Acme_framework.php'),
+            file_get_contents($this->extensionDir() . '/acme/Acme.php')
         );
     }
 }

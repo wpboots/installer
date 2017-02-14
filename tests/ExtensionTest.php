@@ -4,7 +4,7 @@ class ExtensionTest extends TestCase
 {
     public function testItInstallsInAppropriateDirectory()
     {
-        $this->assertTrue(is_dir($this->extensionDir));
+        $this->assertTrue(is_dir($this->extensionDir()));
     }
 
     public function testItCreatesConfigFileOnInstall()
@@ -26,12 +26,12 @@ class ExtensionTest extends TestCase
     public function testItVersionsPsr4AutoloadsOnInstall()
     {
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Acme_1_0.php'),
-            file_get_contents($this->extensionDir . '/acme/Acme.php')
+            file_get_contents($this->extensionDir() . '/Acme_1_0.php'),
+            file_get_contents($this->extensionDir() . '/acme/Acme.php')
         );
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Emca_1_0.php'),
-            file_get_contents($this->extensionDir . '/emca/Emca.php')
+            file_get_contents($this->extensionDir() . '/Emca_1_0.php'),
+            file_get_contents($this->extensionDir() . '/emca/Emca.php')
         );
     }
 
@@ -55,12 +55,12 @@ class ExtensionTest extends TestCase
         $this->composerUpdate();
 
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Acme_1_1.php'),
-            file_get_contents($this->extensionDir . '/acme/Acme.php')
+            file_get_contents($this->extensionDir() . '/Acme_1_1.php'),
+            file_get_contents($this->extensionDir() . '/acme/Acme.php')
         );
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Emca_1_1.php'),
-            file_get_contents($this->extensionDir . '/emca/Emca.php')
+            file_get_contents($this->extensionDir() . '/Emca_1_1.php'),
+            file_get_contents($this->extensionDir() . '/emca/Emca.php')
         );
     }
 
@@ -74,8 +74,8 @@ class ExtensionTest extends TestCase
         $this->assertEquals('1.1', $config['version']);
         $this->assertFalse($config['mounted']);
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Acme.php'),
-            file_get_contents($this->extensionDir . '/acme/Acme.php')
+            file_get_contents($this->extensionDir() . '/Acme.php'),
+            file_get_contents($this->extensionDir() . '/acme/Acme.php')
         );
 
         // global => only global mounting.
@@ -86,8 +86,8 @@ class ExtensionTest extends TestCase
         $this->assertEquals('1.2', $config['version']);
         $this->assertEquals('global', $config['mounted']);
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Acme_global.php'),
-            file_get_contents($this->extensionDir . '/acme/Acme.php')
+            file_get_contents($this->extensionDir() . '/Acme_global.php'),
+            file_get_contents($this->extensionDir() . '/acme/Acme.php')
         );
 
         // local => only local mounting.
@@ -98,8 +98,8 @@ class ExtensionTest extends TestCase
         $this->assertEquals('1.3', $config['version']);
         $this->assertEquals('local', $config['mounted']);
         $this->assertEquals(
-            file_get_contents($this->extensionDir . '/Acme_local.php'),
-            file_get_contents($this->extensionDir . '/acme/Acme.php')
+            file_get_contents($this->extensionDir() . '/Acme_local.php'),
+            file_get_contents($this->extensionDir() . '/acme/Acme.php')
         );
     }
 }
