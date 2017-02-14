@@ -20,7 +20,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "bhittani/php-parser": "dev-master",
+        "bhittani/php-parser": "^0.1.6",
         "composer-plugin-api": "^1.1"
     },
     "require-dev": {
