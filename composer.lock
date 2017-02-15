@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff17075683762cdb428edf56e25a7a38",
+    "content-hash": "35c0e3ecbdbf26e89fe5c6a74fdc4329",
     "packages": [
         {
             "name": "bhittani/php-parser",
-            "version": "0.1.6",
+            "version": "0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kamalkhan/php-parser.git",
-                "reference": "74cebef37438697902fb6fba5ed5ee3e02a05314"
+                "reference": "31fde820f98c481889e8836cfbe6116dc164a5c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kamalkhan/php-parser/zipball/74cebef37438697902fb6fba5ed5ee3e02a05314",
-                "reference": "74cebef37438697902fb6fba5ed5ee3e02a05314",
+                "url": "https://api.github.com/repos/kamalkhan/php-parser/zipball/31fde820f98c481889e8836cfbe6116dc164a5c9",
+                "reference": "31fde820f98c481889e8836cfbe6116dc164a5c9",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "parser",
                 "syntax"
             ],
-            "time": "2017-02-12T22:02:33+00:00"
+            "time": "2017-02-15T19:01:40+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1220,9 +1220,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [],
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": []

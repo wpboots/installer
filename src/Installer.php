@@ -21,7 +21,7 @@ use PhpParser\ParserFactory;
 use Composer\Package\PackageInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use Composer\Installer\LibraryInstaller;
-use Bhittani\PhpParser\AppendSuffixVisitor;
+use Bhittani\PhpParser\AppendRegexVisitor;
 use PhpParser\PrettyPrinter\Standard as PhpPrinter;
 
 /**
@@ -102,11 +102,11 @@ abstract class Installer extends LibraryInstaller
         $traverser = new NodeTraverser;
         if (!$skipLocalMount && isset($autoloads['psr-4'])) {
             foreach (array_keys($autoloads['psr-4']) as $prefix) {
-                $regexes['/^\\\\?' . preg_quote($prefix) . '/'] = $suffix;
+                $regexes['/^\\\?' . preg_quote($prefix) . '/'] = $suffix;
             }
         }
         if (count($regexes)) {
-            $traverser->addVisitor(new AppendSuffixVisitor(null, $regexes));
+            $traverser->addVisitor(new AppendRegexVisitor($regexes));
         }
 
         $printer = new PhpPrinter;
