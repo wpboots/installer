@@ -19,7 +19,6 @@ use PhpParser\Error;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use Composer\Package\PackageInterface;
-use PhpParser\NodeVisitor\NameResolver;
 use Composer\Installer\LibraryInstaller;
 use Bhittani\PhpParser\AppendRegexVisitor;
 use PhpParser\PrettyPrinter\Standard as PhpPrinter;

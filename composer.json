@@ -17,8 +17,10 @@
             "Boots\\Installer\\": "src/"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "bhittani/php-parser": "^0.1.8",
+        "bhittani/php-parser": "^0.1.9",
         "composer-plugin-api": "^1.1"
     },
     "require-dev": {
